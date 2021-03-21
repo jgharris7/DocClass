@@ -5,11 +5,21 @@ Created on Fri Mar 19 08:44:54 2021
 @author: jgharris
 """
 minLength=5
+maxlines=8000000
+#dataFile='/test/testshort.csv'
+maxFeatures=1000
+mindf=1
+maxdf=1.0
+mindf=1
+testsize=.2
+random_state=45
+alphasmooth=1
+ngramrange=(1,1)
 from sklearn.feature_extraction.text import CountVectorizer
 #from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import MultinomialNB
 #from sklearn.metrics import accuracy_score
-#from sklearn.metrics import confusion_matrix
+from sklearn.metrics import confusion_matrix
 #import matplotlib
 #import matplotlib.pyplot as plt
 #import numpy as np
@@ -19,51 +29,58 @@ class Model(object):
     def __init__(self):
         self.isloaded=False
         return
-    def load(self,name):
-        return
+
     def predict(self,features):
         return
+    def fit (self,x,y):
+        return  
 
 class DocClf(Model):
     def __init__(self):
         return
-    def load(self,modelName):
-        try:
-            self.vec=pickle.load(open(modelName+"_vectors.pck","rb"))
-        except:
-            err = "vectors "+str(sys.exc_info()[0])
-            return err
-        try:
-            self.nbclf=pickle.load(open(modelName+"_nbayes.pck","rb"))
-        except:
-            err = "classifier "+str(sys.exc_info()[0])
-            return err
-        try: 
-             self.conf=pickle.load(open(modelName+"_conf.pck","rb"))
-        except:
-             err = "confidence "+str(sys.exc_info()[0])
-             return err
-        self.isloaded=True
-        return None
+    def fit(self,x,y):
+            # generate dictionary of words and numb of word occurences
+    # in each document
+        self.vectorizer=\
+        CountVectorizer(max_df=maxdf,min_df=mindf,max_features=maxFeatures,
+                               ngram_range=ngramrange)
+        
+        xv=self.vectorizer.fit_transform(x)
+        self.nbclf=MultinomialNB(alpha=alphasmooth)
+        self.nbclf.fit(xv,y)
+        ytrain=self.nbclf.predict(xv)
+        return ytrain
     
-    def predictOne(self,words):
-        if (not(self.isloaded)):
-            return "No_model_loaded"
-        if(len(words)<minLength):
-            return "String_to_short_for_model"
+    #predict for a group of x value
+    def predict(self,x):
+        if (len(x[0])<minLength):
+            y=["No input"]
+            return y
         try:
-            x1=self.vec.transform([words])
+            xv=self.vectorizer.transform(x)
+            y=self.nbclf.predict(xv)
         except:
-            return "failed_vectorizer_"+str(sys.exc_info()[0])
+            raise
+        return y
+    
+    # Compute confidence given predicted values & return confusion matrix
+    def confidence(self,ytest,ytestpred):
+        conf_mat = confusion_matrix(ytest, ytestpred)
+    # compute accuracy given predicted value
+        labels = sorted(set(ytest))
+        self.confidence=dict(zip(labels, conf_mat.diagonal()/
+                                 conf_mat.sum(axis=0)))
+        return conf_mat
+    # get the Confidence score for a single item:
+    def getConfidence(self,x,y):
         try:
-            result=self.nbclf.predict(x1)[0]
+            return self.confidence[y]
         except:
-            return "failed_nbclf_"+str(sys.exc_info()[0])
-        try:
-            confidence=self.conf[result]
-        except:
-            return "failed_confidence_"+str(sys.exc_info()[0])
-        return (result,confidence)
+            return -1.0;
+        
+
+        
+    
         
 
    
