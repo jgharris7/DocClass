@@ -1,0 +1,11 @@
+version = 0.1
+[default]
+[default.deploy]
+[default.deploy.parameters]
+stack_name = "jgharris-docclass"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-h2q6i1dbd773"
+s3_prefix = "jgharris-docclass"
+region = "us-east-1"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"
+image_repositories = ["DocClassFunction=709169378429.dkr.ecr.us-east-1.amazonaws.com/jgharris-docclass"]
