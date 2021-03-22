@@ -7,7 +7,7 @@ Created on Thu Mar 18 17:55:54 2021
 root='C:/Users/jgharris/DocClass/'
 
 dataFile='/data/shuffled-full-set-hashed.csv'
-modelName="v2"
+
 
 
 import statistics as stat
@@ -22,9 +22,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pickle
 from model import *
-maxlines=800000
+
+modelName="v3"
+maxlines=8000000
 #dataFile='/test/testshort.csv'
-maxFeatures=1000
+maxFeatures=900
 mindf=1
 maxdf=1.0
 mindf=1
@@ -32,6 +34,8 @@ testsize=.2
 random_state=45
 alphasmooth=1
 ngramrange=(1,1)
+MAXSTRINGLENGH=4000
+FIRSTSTRINGLENGTH=80
 class documents:
     # y = classification
     # words = words in document ("x" values)
@@ -65,10 +69,12 @@ def main():
      # Set up corpus for training               
     corpus=documents()
     corpus.readFromFile(root+dataFile,maxline=maxlines)
-    model1=DocClf()
+    model1=DocClf2(maxStringLength=MAXSTRINGLENGH, \
+                 firstStringLength=FIRSTSTRINGLENGTH)
     # split into test and training sets
     xtrain,xtest,ytrain,ytest=\
-        train_test_split(corpus.words,corpus.y,test_size=testsize)
+        train_test_split(corpus.words,corpus.y,test_size=testsize, \
+                         random_state=random_state)
     ytrainpred=model1.fit(xtrain,ytrain)
     ytestpred=model1.predict(xtest)
 
@@ -81,13 +87,23 @@ def main():
     conf_mat =model1.confidence(ytest, ytestpred)
     # compute accuracy given predicted value
    
-    '''
-    pickle.dump(vectorizer,open(root+'/test/'+modelName+"_vectors.pck","wb"))
-    pickle.dump(nbclf,open(root+'/test/'+modelName+"_nbayes.pck","wb"))
-    pickle.dump(confidence,open(root+'/test/'+modelName+"_conf.pck","wb"))
-    '''
+ 
     pickle.dump(model1,open(root+modelName+".pckmdl","wb"))
     print(model1.confidence)
+    print(ytestpred[0])
+    print(xtest[0][0:20])
+    testfile=open(root+modelName+"testdata.txt","wt")
+    
+    testfile.write(ytestpred[0])
+    testfile.write("\n")
+    testfile.write(xtest[0])
+    testfile.write("\n")
+    testfile.write(ytestpred[10])
+    testfile.write("\n")
+    testfile.write(xtest[10])
+    testfile.write("\n")
+    testfile.close()
+    print( model1.message)
 def docpeek():
     corpus=documents()
     corpus.readFromFile(root+dataFile,maxline=maxlines)

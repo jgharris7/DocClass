@@ -11,11 +11,11 @@ import os
 import boto3
 import pickle
 s3=boto3.client('s3')
-s3_bucket=os.environ['s3_bucket']
+#s3_bucket=os.environ['s3_bucket']
 model_name=os.environ['model_name']
 temp_file_path='./'
 headers={
-        "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, content-type, Accept",
+        "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type,  Accept",
         "Access-Control-Allow-Origin" : "*"
         }
 from model import *
@@ -37,6 +37,8 @@ def lambda_handler(event,context):
             )
         }
    statustCode=-100
+   prediction=" "
+   confidence=" "
    try:
        '''
        s3.download_file(s3_bucket,model_name+".pckmdl",
@@ -75,7 +77,8 @@ def lambda_handler(event,context):
         "body": json.dumps({
             "prediction": str(prediction),
             "confidence": str(confidence),
-            "model_name": model_name
+            "model_name": model_name,
+            "description": myModel.message
         })
     }
 def main():
@@ -84,10 +87,10 @@ def main():
         queryStringParameters={"words":xtest}
         event={"queryStringParameters":queryStringParameters}
         global temp_file_path
-        temp_file_path='./'+model_name
+        temp_file_path='../'
         x=lambda_handler(event=event,context="")
         print(x)
-        queryStringParameters={"wordsx":xtest}
+        queryStringParameters={"words":xtest}
         event={"queryStringParameters":queryStringParameters}
         lambda_handler(event=event,context="")
 if __name__=='__main__':

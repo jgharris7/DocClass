@@ -1,5 +1,5 @@
 ARG PYTHONVERSION=3.7
-ARG MODEL_NAME=v2
+ARG MODEL_NAME=v3
 
 FROM public.ecr.aws/lambda/python:${PYTHONVERSION} as docclass_1
 ARG PYTHONVERSION
