@@ -104,5 +104,5 @@ def main():
    event={"queryStringParameters":queryStringParameters}
    lambda_handler(event=event,context="")
 if __name__=='__main__':
-    main()    
+    main()       
    
