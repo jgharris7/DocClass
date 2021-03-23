@@ -28,7 +28,7 @@
               .then(data=> {console.log(data);
             this.returnval=data
             document.getElementById("prediction").innerHTML =data.prediction;
-            document.getElementById("confidence").innerHTML=data.confidence.substring(1,4);
+            document.getElementById("confidence").innerHTML=Number(data.confidence.substring(1,10)).toFixed(2);
             document.getElementById("model_name").innerHTML=data.model_name;
             document.getElementById("model_information").innerHTML=data.description;
             document.getElementById("text_length").innerHTML=textLength;
