@@ -38,12 +38,14 @@ data/*.zip -- zip file of training set (large)
 The model is deployed from the "model" directory.
 ### Step 1 Configuration of Dockerfile and Template.yaml
 The key things to be customized are:
-1. The model name (model_name or MODEL_NAME) in the Dockerfile and .yaml file.
-2. The rolename in the Template.yaml file
-3. The name of the AWS ECR (Elastic Contain Repository at https://console.aws.amazon.com/ecr )in the deploy.sh script
-4. The stack-name in the deploy.sh script
-5. The python Model Object used (only if you are changing to a different class of models). in the Dockerfile
-6. The URL in curlit.sh and in ../http/docClass.js
+1. The model name (model_name or MODEL_NAME) in the Dockerfile and Template.yaml file.
+2. The unit_model_name in the python Model file (app/DocClfTLinSVC.py) MUST match
+the model name in the Dockerfile and Template.yaml file or the model unit tests will fail. The model_name set in the "learnLinSVC.py" file does not need updating for the deployment, but local unit tests will fail if run in the IDE after training the model.
+3. The rolename in the Template.yaml file
+4. The name of the AWS ECR (Elastic Contain Repository at https://console.aws.amazon.com/ecr )in the deploy.sh script
+5. The stack-name in the deploy.sh script
+6. The python Model Object used (only if you are changing to a different class of models). in the Dockerfile
+7. The URL in curlit.sh and in ../http/docClass.js
 
 
 To deploy the model, insure the Dockerfile and Template.yaml have the same value for the "model_name". The key lines are:

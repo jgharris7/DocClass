@@ -13,7 +13,7 @@ mindf=1
 maxdf=1.0
 mindf=1
 alphasmooth=1
-ngramrange=(1,1)
+ngramrange=(1,3)
 MAXSTRINGLENGH=7060
 FIRSTSTRINGLENGTH=80
 

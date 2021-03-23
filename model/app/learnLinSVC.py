@@ -26,6 +26,7 @@ Created on Mon Mar 22 21:09:34 2021
 """
 
 root='C:/Users/jgharris/DocClass/'
+outdir=root+'model/'
 
 dataFile='/data/shuffled-full-set-hashed.csv'
 
@@ -37,7 +38,7 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
  
 from sklearn.metrics import accuracy_score
- 
+import os
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
@@ -47,13 +48,13 @@ from Documents import Documents
 
 
 #dataFile='/test/testshort.csv'
-MAXFEATURES=1000
+MAXFEATURES=2000
 
 PENALTY='l2'
 LOSS='squared_hinge'
 DUAL=False
-modelName="linSVCv0"
-
+modelName="linSVCv"
+os.environ['model_name']=modelName
 
 maxlines=8000000
 testsize=.2
@@ -112,11 +113,11 @@ def main():
     # compute accuracy given predicted value
    
  
-    pickle.dump(model1,open(root+modelName+".pckmdl","wb"))
+    pickle.dump(model1,open(outdir+modelName+".pckmdl","wb"))
     
     print(ytestpred[0])
     print(xtest[0][0:20])
-    testfile=open(root+modelName+"testdata.txt","wt")
+    testfile=open(outdir+modelName+"testdata.txt","wt")
     
     testfile.write(ytestpred[0])
     testfile.write(",")
@@ -125,6 +126,10 @@ def main():
     testfile.write(ytestpred[10])
     testfile.write(",")
     testfile.write(xtest[10])
+    testfile.write("\n")
+    testfile.write(ytestpred[25])
+    testfile.write(",")
+    testfile.write(xtest[25])
     testfile.write("\n")
     testfile.close()
     print( model1.message)
