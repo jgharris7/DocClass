@@ -1,6 +1,6 @@
 
     H1 {
-        font-size: 60px;
+        font-size: 30px;
         font-weight: 900;
         background-color: darkgrey;
         text-align:center
@@ -9,7 +9,7 @@
     H2 {
         color:#0e0901;
         font-weight:bold;
-        font-size: 30px;
+        font-size: 20px;
         background-color: rgb(194, 240, 240);
         width: 500px;
     }
@@ -45,13 +45,13 @@
         align-content: unset;
         margin-left: 0px;
         width: 700px;
-        height: 300px;
+        height: 50px;
         float: below;
         }
  
     #results {
         color:  #070707;
-        font-size: 20px;
+        font-size: 15px;
         font-weight: 600;
         background-color: rgb(194, 240, 240);
         width: 900px;
