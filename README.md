@@ -62,7 +62,7 @@ model_name: linSVCv0
 
 Also, you should modify the ECR, the stackname and S3 bucket names to have ones that are for your implementation. The stack name is in the "deploy.sh" script. 
 
-The model code resides in the app/DocClfTLinSVC.py file, the stored "learned" model object is in the file with the model name+".pckmdl" extension, and two test cases are in the file with the model name+"testdata.txt". Both of the latter two should reside in the model/ directory. If you "relearn" the model, the configuration is currently set up to create the model object file and test case in the main project directory to be copied down if the result is satisfactory.
+The model code resides in the app/DocClfTLinSVC.py file, the stored "learned" model object is in the file with the model name+".pckmdl" extension, and two test cases are in the file with the model name+"testdata.txt". Both of the latter two should reside in the model/ directory. 
 I have a role "S3LambdaRead" setup that has AmazonS3ReadOnlyAccess and AWSLambdaBasicExecutionRole attached. The current version does not put files on the S3, but just includes all files in the build. The next step is just to execute the build. 
 
 ### Step 2 Build the model and deploy it
