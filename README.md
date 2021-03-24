@@ -7,9 +7,9 @@ Deployment requirments:
  docker
  Amazon AWS tools SAM and CALI
 # Directories and files
--data -- the model training data. You need to unzip the compressed datafile
--model -- the files for building the deployed model
--model/app -- the source code for the app and the model learning code. Includes some prior classifiers that have been superceded
+- data -- the model training data. You need to unzip the compressed datafile
+- model -- the files for building the deployed model
+- model/app -- the source code for the app and the model learning code. Includes some prior classifiers that have been superceded
 -http/ -- the website interface for running the model
 -test/ -- some test cases for some versions of the model
 -model/Dockerfile -- Docker configuration file
