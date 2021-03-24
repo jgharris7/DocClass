@@ -106,8 +106,12 @@ class DocClfTLinSVC():
         self.confidence=dict(zip(labels, conf_mat.diagonal()/
                                  (.1+conf_mat.sum(axis=0))))
         return conf_mat
+    #
     # get the Confidence score for a single item:
-        
+    # "x" is stuck in here, but not used because it may be possible
+    # to improve the Confidence estimate by metrics like
+    # distance from separating boundary or a relative score
+    #    
     def getConfidence(self,x,y):
         try:
             return self.confidence[y]
