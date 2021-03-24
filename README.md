@@ -10,32 +10,32 @@ Deployment requirments:
 - data -- the model training data. You need to unzip the compressed datafile
 - model -- the files for building the deployed model
 - model/app -- the source code for the app and the model learning code. Includes some prior classifiers that have been superceded
--http/ -- the website interface for running the model
--test/ -- some test cases for some versions of the model
--model/Dockerfile -- Docker configuration file
--model/Template.yaml -- configuration file for SAM to build the Lambda function and API Gateway
--model/app/app.py -- the Lambda serverless API that is called.
--model/app/DocClfTLinSVC.py -- the actual Model implementation
--model/linSVCv0.pckl -- the trained model object stored by pickle. This is read in for making predictions.
--model/linSVCv0testdata.txt -- sample test cases from the accuracy calculation on the test holdout sample. Used for Unit tests.
--model/requirements.txt -- required python modules used to build the docker container
--model/Template.yaml -- Template used by AWS SAM for creating the docker file, Lambda function, and API endpoint
--model/Dockerfile -- docker configuration script that gives instructions to create the docker container and run test cases
--model/deploy.sh -- script to deploy the model to AWS Lambda cloud
--model/curlit.sh -- simple test using curl to verify operation of the API
+- http/ -- the website interface for running the model
+- test/ -- some test cases for some versions of the model
+- model/Dockerfile -- Docker configuration file
+- model/Template.yaml -- configuration file for SAM to build the Lambda function and API Gateway
+- model/app/app.py -- the Lambda serverless API that is called.
+- model/app/DocClfTLinSVC.py -- the actual Model implementation
+- model/linSVCv0.pckl -- the trained model object stored by pickle. This is read in for making predictions.
+- model/linSVCv0testdata.txt -- sample test cases from the accuracy calculation on the test holdout sample. Used for Unit tests.
+- model/requirements.txt -- required python modules used to build the docker container
+- model/Template.yaml -- Template used by AWS SAM for creating the docker file, Lambda function, and API endpoint
+- model/Dockerfile -- docker configuration script that gives instructions to create the docker container and run test cases
+- model/deploy.sh -- script to deploy the model to AWS Lambda cloud
+- model/curlit.sh -- simple test using curl to verify operation of the API
 
--http/index.html -- web page for accessing the model
--http/docClass.js -- javascript code for the webpage
--http/docClassstyles.css -- style sheets needed for the webpage
+- http/index.html -- web page for accessing the model
+- http/docClass.js -- javascript code for the webpage
+- http/docClassstyles.css -- style sheets needed for the webpage
 # Other files not required for actual deployment
--model/app/learnLinSVC.py -- actually used to train the model
--model/app/Documents.py  -- Object to load data for training the model
--model/app/*.py -- Other model objects (Naive Bayes, Complement Naive Bayes) and training file
--data/*.zip -- zip file of training set (large)
+- model/app/learnLinSVC.py -- actually used to train the model
+- model/app/Documents.py  -- Object to load data for training the model
+- model/app/*.py -- Other model objects (Naive Bayes, Complement Naive Bayes) and training file
+- data/*.zip -- zip file of training set (large)
 
 # Deployment
 ## Deploy model itself:
--The model is deployed from the "model" directory.
+- The model is deployed from the "model" directory.
 ### Step 1 Configuration of Dockerfile and Template.yaml
 The key things to be customized are:
 1. The model name (model_name or MODEL_NAME) in the Dockerfile and Template.yaml file.
