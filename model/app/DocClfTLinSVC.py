@@ -22,6 +22,7 @@ CREG=1.
 PENALTY='l2'
 LOSS='squared_hinge'
 DUAL=False
+DEBUG=1
 
  
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -113,6 +114,8 @@ class DocClfTLinSVC():
             LinearSVC(penalty=self.penalty,loss=self.loss,dual=self.dual,
                 C=item)
             )
+           if(DEBUG>=1):
+               print(modelt.named_steps)
            scores=cross_val_score(modelt,xtrain,ytrain)
            print("time=%7.1f " % (time.time()-start_time),end="")
            print("%5.2f " % item, end=' ')

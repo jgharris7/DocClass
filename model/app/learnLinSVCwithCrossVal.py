@@ -61,13 +61,14 @@ DUAL=False
 modelName="linSVCv2test"
 os.environ['model_name']=modelName
 
-maxlines=800000
+maxlines=80000000
 testsize=.2
 random_state=45
 MAXSTRINGLENGH=7000
 FIRSTSTRINGLENGTH=80
 conf_mat=[]
-cvec=[.5, .7,.9, 1.0, 1.1,1.2,1.3,1.4]
+cvec=[.8,1.0,2.0,4.0,10.0,90.]  #if only one value in array, skip cross validation
+criteriaSign=-1.00 ### +1.00 if loss function, -1.00 if it is accuracy ((positive good))
 start_time=time.time()
 
 def main():  
@@ -89,15 +90,21 @@ def main():
     xtrain,xtest,ytrain,ytest=\
         train_test_split(corpus.words,corpus.y,test_size=testsize, \
                          random_state=random_state)
-    scorelist=model1.crossVal(cvec,xtrain,ytrain)
     ibest=0
-    mincv=9.e9
-    for item in range(0,len(cvec)):
-        meancvscore=scorelist[item].mean()
-        if meancvscore<mincv:
-            mincv=meancvscore
-            ibest=item
-        print(item,cvec[item],meancvscore,ibest)
+    if(len(cvec)>1):
+       scorelist=model1.crossVal(cvec,xtrain,ytrain)
+       mincv=9.e9*criteriaSign
+    
+# find value that gave best cross validation score & use it
+       print("case  Creg     meanCVscore  best so far")
+       for item in range(0,len(cvec)):
+          meancvscore=scorelist[item].mean()
+          if meancvscore*criteriaSign<mincv*criteriaSign:
+              mincv=meancvscore
+              ibest=item
+              print("%2d   " % item, "%5.2f   " % cvec[item],
+              "%8.5f   " % meancvscore,"%2d " % ibest)
+#
     model1=DocClfTLinSVC(maxStringLength=MAXSTRINGLENGH, \
                  firstStringLength=FIRSTSTRINGLENGTH,
                  penalty=PENALTY,loss=LOSS,dual=DUAL,
