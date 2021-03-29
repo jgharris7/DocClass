@@ -16,6 +16,7 @@ alphasmooth=1
 ngramrange=(1,3)
 MAXSTRINGLENGH=7060
 FIRSTSTRINGLENGTH=80
+CREG=1.
 
 # SVC options
 PENALTY='l2'
@@ -24,6 +25,8 @@ DUAL=False
 
  
 from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.pipeline import make_pipeline
+from sklearn.model_selection import cross_val_score
 #from sklearn.model_selection import train_test_split
 
 from sklearn.svm import LinearSVC
@@ -31,6 +34,7 @@ from sklearn.svm import LinearSVC
 from sklearn.metrics import confusion_matrix
 import unittest
 import pickle
+import time
  
 #import matplotlib
 #import matplotlib.pyplot as plt
@@ -40,21 +44,24 @@ import pickle
  
 unit_temp_file_path='./'
 unit_model_name='linSVCv0'
+start_time=time.time()
 class DocClfTLinSVC():
     def __init__(self,maxStringLength=MAXSTRINGLENGH, \
                  firstStringLength=FIRSTSTRINGLENGTH,
                  penalty=PENALTY,loss=LOSS,dual=DUAL,
+                 creg=CREG,
                  maxFeatures=MAXFEATURES
                  ):
         self.maxStringLength=maxStringLength
         self.firstStringLength=firstStringLength
         self.loss=loss
         self.penalty=penalty
+        self.creg=creg
         self.dual=dual
         self.maxFeatures=maxFeatures
         self.message="LinearSVC using TF-IDF with "+"%5d" % maxFeatures + " features " + \
         " ngram-range "+"%2d" % ngramrange[0]+" to "+"%2d" % ngramrange[1] + \
-        " maxString Length "+ "%6d" % self.maxStringLength
+        " maxString Length "+ "%6d" % self.maxStringLength +"Creg="+"%4.2f" % self.creg
        
         return
 
@@ -78,7 +85,7 @@ class DocClfTLinSVC():
                                ngram_range=ngramrange)
         xv=self.vectorizer.fit_transform(xprocessed)
         self.nbclf=LinearSVC(penalty=self.penalty,loss=self.loss,dual=self.dual,
-                        )
+                C=self.creg)
         self.nbclf.fit(xv,y)
         ytrain=self.nbclf.predict(xv)
         return ytrain
@@ -96,6 +103,26 @@ class DocClfTLinSVC():
         except:
             raise
         return y
+    def crossVal(self,cvec,xtrain,ytrain):
+        scorelist=[]
+        global start_time
+        for item in cvec:
+           modelt=make_pipeline(
+            TfidfVectorizer(max_df=maxdf,min_df=mindf,max_features=self.maxFeatures,
+                               ngram_range=ngramrange),
+            LinearSVC(penalty=self.penalty,loss=self.loss,dual=self.dual,
+                C=item)
+            )
+           scores=cross_val_score(modelt,xtrain,ytrain)
+           print("time=%7.1f " % (time.time()-start_time),end="")
+           print("%5.2f " % item, end=' ')
+           [print("%10.5f " % xval,end='') for xval in scores]
+           print("")
+           scorelist.append(scores)
+        return scorelist
+           
+           
+        
     
     # Compute confidence given predicted values & return confusion matrix
     
